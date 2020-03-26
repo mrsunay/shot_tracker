@@ -1,11 +1,14 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { getShots } from "../../actions/shots";
+import { getShots, deleteShots } from "../../actions/shots";
+import moment from "moment";
 
 export class Shots extends Component {
   static propTypes = {
-    shots: PropTypes.array.isRequired
+    shots: PropTypes.array.isRequired,
+    getShots: PropTypes.func.isRequired,
+    deleteShots: PropTypes.func.isRequired
   };
 
   componentDidMount() {
@@ -22,7 +25,6 @@ export class Shots extends Component {
               <th>Date</th>
               <th>Threes Made</th>
               <th>Threes Attempted</th>
-              <th>Threes Made</th>
               <th>Twos Made</th>
               <th>Twos Attempted</th>
               <th>Layups Made</th>
@@ -33,7 +35,7 @@ export class Shots extends Component {
           <tbody>
             {this.props.shots.map(shots => (
               <tr key={shots.id}>
-                <td>{shots.workout_date}</td>
+                <td>{moment(shots.workout_date).format("MMM Do YYYY")}</td>
                 <td>{shots.threes_made}</td>
                 <td>{shots.threes_attempted}</td>
                 <td>{shots.twos_made}</td>
@@ -41,7 +43,12 @@ export class Shots extends Component {
                 <td>{shots.layups_made}</td>
                 <td>{shots.layups_attempted}</td>
                 <td>
-                  <button className="btn btn-dange btn-sm">Delete</button>
+                  <button
+                    onClick={this.props.deleteShots.bind(this, shots.id)}
+                    className="btn btn-danger btn-sm"
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
@@ -56,4 +63,4 @@ const mapStateToProps = state => ({
   shots: state.shots.shots
 });
 
-export default connect(mapStateToProps, { getShots })(Shots);
+export default connect(mapStateToProps, { getShots, deleteShots })(Shots);

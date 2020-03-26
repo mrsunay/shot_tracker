@@ -1,4 +1,4 @@
-import { GET_SHOTS } from "../actions/types.js";
+import { GET_SHOTS, DELETE_SHOTS, ADD_SHOTS } from "../actions/types.js";
 import { bindActionCreators } from "redux";
 
 const initialState = {
@@ -11,6 +11,16 @@ export default function(state = initialState, action) {
       return {
         ...state,
         shots: action.payload
+      };
+    case DELETE_SHOTS:
+      return {
+        ...state,
+        shots: state.shots.filter(shot => shot.id !== action.payload)
+      };
+    case ADD_SHOTS:
+      return {
+        ...state,
+        shots: [...state.shots, action.payload]
       };
     default:
       return state;
