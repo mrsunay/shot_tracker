@@ -1,5 +1,4 @@
 import { GET_SHOTS, DELETE_SHOTS, ADD_SHOTS } from "../actions/types.js";
-import { bindActionCreators } from "redux";
 
 const initialState = {
   shots: []

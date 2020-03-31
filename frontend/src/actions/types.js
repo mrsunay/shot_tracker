@@ -3,3 +3,4 @@ export const DELETE_SHOTS = "DELETE_SHOTS";
 export const ADD_SHOTS = "ADD_SHOTS";
 export const GET_ERRORS = "GET_ERRORS";
 export const CREATE_MESSAGE = "CREATE_MESSAGE";
+export const GET_NEWS = "GET_NEWS";
