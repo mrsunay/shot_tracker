@@ -1,26 +1,28 @@
 import axios from "axios";
 
-import { createMessage } from "./messages";
-
-import { GET_SHOTS, DELETE_SHOTS, ADD_SHOTS, GET_ERRORS } from "./types";
+import { createMessage, returnErrors } from "./messages";
+import { tokenConfig } from "./auth";
+import { GET_SHOTS, DELETE_SHOTS, ADD_SHOTS } from "./types";
 
 // GET SHOTS
-export const getShots = () => dispatch => {
+export const getShots = () => (dispatch, getState) => {
   axios
-    .get("/api/shots/")
+    .get("/api/shots/", tokenConfig(getState))
     .then(res => {
       dispatch({
         type: GET_SHOTS,
         payload: res.data
       });
     })
-    .catch(err => console.log(err));
+    .catch(err =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
 };
 
 // Delete shots
-export const deleteShots = id => dispatch => {
+export const deleteShots = id => (dispatch, getState) => {
   axios
-    .delete(`/api/shots/${id}/`)
+    .delete(`/api/shots/${id}/`, tokenConfig(getState))
     .then(res => {
       dispatch(createMessage({ deleteShots: "Workout Deleted" }));
       dispatch({
@@ -42,9 +44,9 @@ export const deleteShots = id => dispatch => {
 };
 
 // ADD SHOTS
-export const addShots = shots => dispatch => {
+export const addShots = shots => (dispatch, getState) => {
   axios
-    .post("/api/shots/", shots)
+    .post("/api/shots/", shots, tokenConfig(getState))
     .then(res => {
       dispatch(createMessage({ addShots: "Workout Added" }));
       dispatch({
@@ -52,15 +54,7 @@ export const addShots = shots => dispatch => {
         payload: res.data
       });
     })
-    .catch(err => {
-      const errors = {
-        msg: err.response.data,
-        status: err.response.status
-      };
-
-      dispatch({
-        type: GET_ERRORS,
-        payload: errors
-      });
-    });
+    .catch(err =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
 };
