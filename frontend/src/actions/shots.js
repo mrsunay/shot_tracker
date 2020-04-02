@@ -1,13 +1,13 @@
 import axios from "axios";
 
 import { createMessage, returnErrors } from "./messages";
-
+import { tokenConfig } from "./auth";
 import { GET_SHOTS, DELETE_SHOTS, ADD_SHOTS } from "./types";
 
 // GET SHOTS
-export const getShots = () => dispatch => {
+export const getShots = () => (dispatch, getState) => {
   axios
-    .get("/api/shots/")
+    .get("/api/shots/", tokenConfig(getState))
     .then(res => {
       dispatch({
         type: GET_SHOTS,
@@ -20,9 +20,9 @@ export const getShots = () => dispatch => {
 };
 
 // Delete shots
-export const deleteShots = id => dispatch => {
+export const deleteShots = id => (dispatch, getState) => {
   axios
-    .delete(`/api/shots/${id}/`)
+    .delete(`/api/shots/${id}/`, tokenConfig(getState))
     .then(res => {
       dispatch(createMessage({ deleteShots: "Workout Deleted" }));
       dispatch({
@@ -44,9 +44,9 @@ export const deleteShots = id => dispatch => {
 };
 
 // ADD SHOTS
-export const addShots = shots => dispatch => {
+export const addShots = shots => (dispatch, getState) => {
   axios
-    .post("/api/shots/", shots)
+    .post("/api/shots/", shots, tokenConfig(getState))
     .then(res => {
       dispatch(createMessage({ addShots: "Workout Added" }));
       dispatch({
